@@ -2,7 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import Navbar from "../components/organisms/Navbar";
-import HorarioCard from "../components/molecules/HorarioCard";
+// Comentar o eliminar esta línea:
+// import HorarioCard from "../components/molecules/HorarioCard";
 import ImageCarousel from "../components/organisms/ImagenCarousel";
 
 import "../styles/Home.css"; 
@@ -54,7 +55,11 @@ export default function Home() {
         </div>
       </div>
 
-      <HorarioCard />
+      <div style={{padding: 20, textAlign: 'center'}}>
+        <h3>Horarios del Museo</h3>
+        <p>Lunes a Viernes: 9:00 - 18:00</p>
+        <p>Sábados y Domingos: 10:00 - 16:00</p>
+      </div>
 
       <ImageCarousel />
 
