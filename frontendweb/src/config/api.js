@@ -1,16 +1,21 @@
 // Configuración centralizada de la API
 const API_CONFIG = {
-  // Dirección base de la API - cámbiala según tu entorno
-  BASE_URL: 'http://localhost',
+  BASE_URL: 'http://localhost/ProyectoFinal/backend',
 
-  // Endpoints
   ENDPOINTS: {
-    LOGIN: '/login.php',
+    LOGIN: '/auth/login.php',
+
+    // Productos
     PRODUCTOS: '/productos.php',
     PRODUCTO: '/producto.php',
     ELIMINAR_PRODUCTO: '/eliminar_producto.php',
     AGREGAR_PRODUCTO: '/agregar_producto.php',
-    EDITAR_PRODUCTO: '/editar_producto.php'
+    EDITAR_PRODUCTO: '/editar_producto.php',
+
+    // 📌 CRUD IMÁGENES (Nuevos)
+    IMAGEN_CREATE: '/imagen/create.php',
+    IMAGEN_UPDATE: '/imagen/update.php',
+    IMAGEN_DELETE: '/imagen/delete.php'
   }
 };
 
@@ -19,5 +24,4 @@ export const getApiUrl = (endpoint) => {
   return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS[endpoint]}`;
 };
 
-// Exportar configuración completa
 export default API_CONFIG;

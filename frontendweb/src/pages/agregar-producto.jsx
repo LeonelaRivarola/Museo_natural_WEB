@@ -1,4 +1,4 @@
-// src/pages/AgregarProducto/index.jsx
+// src/pages/agregar-producto.jsx
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { getApiUrl } from '../config/api';
@@ -8,7 +8,7 @@ export default function AgregarProducto() {
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [imagen, setImagen] = useState("");
+  const [imagen, setImagen] = useState(null); // archivo seleccionado
 
   const handleAgregar = async () => {
     if (!nombre || !precio) {
@@ -17,23 +17,57 @@ export default function AgregarProducto() {
     }
 
     try {
-      const res = await fetch(getApiUrl('AGREGAR_PRODUCTO'), {
+      let imagen_id = null;
+
+      // --------------------------------------------------------------------
+      // 1️⃣ SI HAY IMAGEN → SUBIRLA AL CRUD DE IMÁGENES
+      // --------------------------------------------------------------------
+      if (imagen) {
+        const formImg = new FormData();
+        formImg.append("archivo", imagen);
+        formImg.append("titulo", nombre);
+
+        const resImg = await fetch(getApiUrl("IMAGEN_CREATE"), {
+          method: "POST",
+          body: formImg,
+        });
+
+        const dataImg = await resImg.json();
+
+        if (!dataImg || !dataImg.id) {
+          alert("Error al subir la imagen");
+          return;
+        }
+
+        imagen_id = dataImg.id;
+      }
+
+      // --------------------------------------------------------------------
+      // 2️⃣ ENVIAR LOS DATOS DEL PRODUCTO + id_imagen
+      // --------------------------------------------------------------------
+      const formData = new FormData();
+      formData.append("nombre", nombre);
+      formData.append("precio", precio);
+      formData.append("descripcion", descripcion);
+      if (imagen_id) formData.append("imagen_id", imagen_id);
+
+      const res = await fetch(getApiUrl("AGREGAR_PRODUCTO"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre, precio, descripcion, imagen }),
+        body: formData,
       });
 
       const data = await res.json();
 
       if (data.status === 200) {
-        alert("Éxito: Producto agregado correctamente");
-        navigate(-1); // vuelve a la página anterior
+        alert("✔ Producto agregado correctamente");
+        navigate(-1);
       } else {
         alert("Error: " + (data.message || "No se pudo agregar el producto"));
       }
+
     } catch (err) {
       console.error("❌ Error al agregar producto:", err);
-      alert("Error: Error al conectar con el servidor");
+      alert("Error de conexión con el servidor");
     }
   };
 
@@ -41,12 +75,13 @@ export default function AgregarProducto() {
     <div style={styles.container}>
       <h1 style={styles.title}>Agregar Producto</h1>
 
-      <input 
-        placeholder="Nombre" 
-        value={nombre} 
-        onChange={(e) => setNombre(e.target.value)} 
-        style={styles.input} 
+      <input
+        placeholder="Nombre"
+        value={nombre}
+        onChange={(e) => setNombre(e.target.value)}
+        style={styles.input}
       />
+
       <input
         placeholder="Precio"
         value={precio}
@@ -54,16 +89,19 @@ export default function AgregarProducto() {
         type="number"
         style={styles.input}
       />
+
       <textarea
         placeholder="Descripción"
         value={descripcion}
         onChange={(e) => setDescripcion(e.target.value)}
-        style={[styles.input, styles.textarea]}
+        style={{ ...styles.input, ...styles.textarea }}
       />
+
+      {/* Input de imagen */}
       <input
-        placeholder="URL de imagen (opcional)"
-        value={imagen}
-        onChange={(e) => setImagen(e.target.value)}
+        type="file"
+        accept="image/*"
+        onChange={(e) => setImagen(e.target.files[0])}
         style={styles.input}
       />
 
@@ -75,18 +113,18 @@ export default function AgregarProducto() {
 }
 
 const styles = {
-  container: { 
-    padding: 20, 
+  container: {
+    padding: 20,
     backgroundColor: "#fff",
     maxWidth: 600,
     margin: "0 auto",
     minHeight: "100vh"
   },
-  title: { 
-    fontSize: 24, 
-    fontWeight: "bold", 
-    color: "#c47719", 
-    marginBottom: 20 
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#c47719",
+    marginBottom: 20
   },
   input: {
     border: "1px solid #ccc",
@@ -108,9 +146,9 @@ const styles = {
     cursor: "pointer",
     width: "100%",
   },
-  buttonText: { 
-    color: "#fff", 
-    fontSize: 16, 
-    fontWeight: "bold" 
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold"
   },
 };
