@@ -3,6 +3,7 @@ import React from "react";
 import ProductImage from "../atoms/ProductImage";
 import ProductPrice from "../atoms/ProductPrice";
 import ProductTitle from "../atoms/ProductTitle";
+import { getImageUrl } from "../../config/api.js";
 
 export default function ProductCard({ item, isAdmin = false, onEdit, onDelete }) {
   const navigate = useNavigate();
@@ -11,12 +12,11 @@ export default function ProductCard({ item, isAdmin = false, onEdit, onDelete })
     <div style={styles.card}>
       <button
         style={styles.productButton}
-        onClick={() =>
-          !isAdmin &&
-          navigate(`/producto/${item.id_producto}`)
-        }
+        onClick={() => !isAdmin && navigate(`/producto/${item.id_producto}`)}
       >
-        <ProductImage uri={item.imagen || "https://via.placeholder.com/300"} />
+        {/* Imagen del producto correctamente corregida */}
+        <ProductImage uri={getImageUrl(item.imagen)} />
+
         <div style={styles.content}>
           <ProductTitle title={item.nombre} />
           <ProductPrice price={item.precio} />
@@ -31,7 +31,7 @@ export default function ProductCard({ item, isAdmin = false, onEdit, onDelete })
           </button>
           <button style={styles.iconButton} onClick={onDelete}>
             <span style={styles.deleteIcon}>🗑️</span>
-            <span style={{...styles.iconLabel, color: "red"}}>Eliminar</span>
+            <span style={{ ...styles.iconLabel, color: "#d32f2f" }}>Eliminar</span>
           </button>
         </div>
       ) : (
@@ -48,13 +48,15 @@ export default function ProductCard({ item, isAdmin = false, onEdit, onDelete })
 
 const styles = {
   card: {
-    flex: 1,
     backgroundColor: "#fff",
-    borderRadius: 10,
+    borderRadius: 6,
     margin: 8,
     overflow: "hidden",
     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-    border: "1px solid #eee",
+    border: "1px solid #e0e0e0",
+    display: "flex",
+    flexDirection: "column",
+    minWidth: 150,
   },
   productButton: {
     border: "none",
@@ -62,51 +64,58 @@ const styles = {
     cursor: "pointer",
     padding: 0,
     width: "100%",
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
   },
   content: {
-    padding: 10,
+    padding: 12,
+    display: "flex",
+    flexDirection: "column",
+    gap: 8,
   },
   adminButtons: {
     display: "flex",
-    flexDirection: "row",
     justifyContent: "space-around",
-    paddingTop: 10,
-    paddingBottom: 10,
-    borderTop: "1px solid #eee",
+    padding: "10px 12px",
+    borderTop: "1px solid #f0f0f0",
+    backgroundColor: "#fafafa",
   },
   iconButton: {
     display: "flex",
+    flexDirection: "column",
     alignItems: "center",
     border: "none",
     background: "none",
     cursor: "pointer",
-    padding: 5,
+    padding: 4,
+    gap: 4,
   },
   editIcon: {
-    fontSize: 22,
+    fontSize: 16,
     color: "#c47719",
   },
   deleteIcon: {
-    fontSize: 22,
-    color: "red",
+    fontSize: 16,
+    color: "#d32f2f",
   },
   iconLabel: {
-    fontSize: 12,
-    color: "#555",
-    marginTop: 3,
+    fontSize: 11,
+    color: "#666",
+    fontWeight: "500",
   },
   viewButton: {
     backgroundColor: "#c47719",
-    paddingTop: 8,
-    paddingBottom: 8,
-    display: "flex",
-    alignItems: "center",
+    padding: "10px 12px",
     border: "none",
     cursor: "pointer",
     width: "100%",
+    display: "flex",
+    justifyContent: "center",
   },
   viewText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 13,
   },
 };

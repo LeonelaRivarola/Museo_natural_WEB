@@ -15,6 +15,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Prevenir scroll horizontal */
@@ -40,4 +41,176 @@ button, a {
   html {
     font-size: 13px;
   }
+}
+
+/* ===== TEMA CLARO ===== */
+body.light-theme {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.light-theme .navbar {
+  background-color: #ffffff;
+  color: #000000;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+body.light-theme .card,
+body.light-theme .modal,
+body.light-theme .dropdown {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #e0e0e0;
+}
+
+body.light-theme input,
+body.light-theme textarea,
+body.light-theme select {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #ccc;
+}
+
+body.light-theme button:not(.primary) {
+  background-color: #f5f5f5;
+  color: #000000;
+}
+
+/* ===== TEMA OSCURO ===== */
+body.dark-theme {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+/* Navbar en tema oscuro */
+body.dark-theme .navbar {
+  background-color: #2d2d2d !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #404040;
+}
+
+/* Componentes en tema oscuro */
+body.dark-theme .card,
+body.dark-theme .modal,
+body.dark-theme .dropdown {
+  background-color: #2d2d2d;
+  color: #e0e0e0;
+  border: 1px solid #404040;
+}
+
+/* Inputs en tema oscuro */
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+  background-color: #404040;
+  color: #e0e0e0;
+  border: 1px solid #555;
+}
+
+body.dark-theme input::placeholder {
+  color: #999;
+}
+
+/* Botones en tema oscuro */
+body.dark-theme button:not(.primary) {
+  background-color: #404040;
+  color: #e0e0e0;
+}
+
+/* Enlaces en tema oscuro */
+body.dark-theme a {
+  color: #4dabf7;
+}
+
+body.dark-theme a:hover {
+  color: #74c0fc;
+}
+
+/* Scrollbar en tema oscuro */
+body.dark-theme::-webkit-scrollbar {
+  width: 8px;
+}
+
+body.dark-theme::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+body.dark-theme::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+body.dark-theme::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Textos específicos */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6 {
+  color: #ffffff;
+}
+
+/* Estados hover en tema oscuro */
+body.dark-theme .card:hover,
+body.dark-theme button:hover {
+  background-color: #363636;
+}
+
+/* Sombras en tema oscuro */
+body.dark-theme .shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Override para elementos que no heredan automáticamente */
+body.dark-theme * {
+  color: inherit;
+}
+
+/* Clases de utilidad para temas */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Asegurar que los SVG e imágenes se adapten */
+body.dark-theme img[src*="logo"] {
+  filter: brightness(0.9);
+}
+
+/* Loading states */
+body.dark-theme .loading {
+  background-color: #363636;
+}
+
+body.dark-theme .loading::after {
+  border-color: #666 transparent transparent transparent;
+}
+
+/* ===== VARIABLES CSS PARA TEMAS ===== */
+:root {
+  --primary-bg: #ffffff;
+  --secondary-bg: #f8f9fa;
+  --text-primary: #000000;
+  --text-secondary: #666666;
+  --border-color: #e0e0e0;
+  --accent-color: #c47719;
+}
+
+.dark-theme {
+  --primary-bg: #1a1a1a;
+  --secondary-bg: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --border-color: #404040;
+  --accent-color: #d4892a;
+}
+
+/* Si prefieres usar variables CSS, puedes aplicar así: */
+.themed-component {
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  border-color: var(--border-color);
 }

@@ -12,9 +12,8 @@ export default function ProductPrice({ price }) {
 
 const styles = {
   price: {
-    fontSize: 15,
+    fontSize: 14,
     color: "#c47719",
     fontWeight: "600",
-    marginTop: 4,
   },
 };

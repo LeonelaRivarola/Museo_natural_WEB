@@ -58,7 +58,7 @@ export default function AgregarProducto() {
         placeholder="Descripción"
         value={descripcion}
         onChange={(e) => setDescripcion(e.target.value)}
-        style={[styles.input, styles.textarea]}
+        style={{...styles.input, ...styles.textarea}}
       />
       <input
         placeholder="URL de imagen (opcional)"

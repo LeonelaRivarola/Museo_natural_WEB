@@ -3,6 +3,7 @@ import React from "react";
 import TextTitle from "../atoms/TextTitle";
 import LoginForm from "../molecules/LoginForm";
 import ButtonPrimary from "../atoms/ButtonPrimary";
+import { Link } from 'react-router-dom';
 
 const LoginSection = ({ usuario, password, setUsuario, setPassword, onSubmit, onRegister }) => {
   return (
@@ -30,9 +31,9 @@ const LoginSection = ({ usuario, password, setUsuario, setPassword, onSubmit, on
 
             <span style={styles.registerText}>
               ¿No tenés cuenta?{' '}
-              <span style={styles.registerLink} onClick={onRegister}>
+              <Link to="/registrarse" style={styles.registerLink}>
                 Registrarme
-              </span>
+              </Link>
             </span>
           </div>
         </div>

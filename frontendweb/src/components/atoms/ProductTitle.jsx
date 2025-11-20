@@ -6,8 +6,9 @@ export default function ProductTitle({ title }) {
 
 const styles = {
   title: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#222",
+    lineHeight: "1.3",
   },
 };
