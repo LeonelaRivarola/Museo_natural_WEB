@@ -1,14 +1,21 @@
-import { useParams, useNavigate } from "react-router-dom";
+// src/pages/editar-producto.jsx
+import { useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { getApiUrl } from "../config/api";
+import { getApiUrl, getImageUrl } from "../config/api";
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 export default function EditarProducto() {
-    const { id } = useParams();
+    const query = useQuery();
+    const id = query.get("id");
     const navigate = useNavigate();
     const [producto, setProducto] = useState(null);
     const [guardando, setGuardando] = useState(false);
 
     useEffect(() => {
+        if (!id) return;
         fetch(`${getApiUrl('PRODUCTO')}?id=${id}`)
             .then((res) => res.json())
             .then((data) => setProducto(data))
@@ -25,31 +32,25 @@ export default function EditarProducto() {
             if (!file) return;
 
             try {
-                const reader = new FileReader();
-                reader.onload = async (event) => {
-                    const imagenBase64 = event.target ? event.target.result : '';
+                const form = new FormData();
+                form.append("archivo", file);
+                form.append("titulo", producto?.nombre || "imagen");
 
-                    const res = await fetch(
-                        `${getApiUrl('AGREGAR_PRODUCTO').replace('agregar_producto.php', 'subir_imagen.php')}`,
-                        {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ imagen: imagenBase64 }),
-                        }
-                    );
+                const res = await fetch(getApiUrl('SUBIR_IMAGEN'), {
+                    method: "POST",
+                    body: form,
+                });
 
-                    const text = await res.text();
-                    console.log("🔹 Respuesta del backend:", text);
-
-                    const data = JSON.parse(text);
-                    if (data.status === 200) {
-                        setProducto({ ...producto, imagen: data.url });
-                        alert("Éxito: Imagen actualizada correctamente");
-                    } else {
-                        alert("Error: " + (data.message || "No se pudo subir la imagen"));
-                    }
-                };
-                reader.readAsDataURL(file);
+                const data = await res.json();
+                // tu subir_imagen_producto.php devuelve: { success: true, nombreArchivo: "prod_xxx.jpg" }
+                if (data && data.success) {
+                    // guardo el nombre de archivo en el objeto producto (backend usa basename si es necesario)
+                    setProducto(prev => ({ ...prev, imagen: data.nombreArchivo }));
+                    alert("Éxito: Imagen subida correctamente");
+                } else {
+                    console.error("Error subida imagen:", data);
+                    alert("Error: no se pudo subir la imagen");
+                }
             } catch (error) {
                 console.error("❌ Error al subir imagen:", error);
                 alert("Error: No se pudo subir la imagen");
@@ -64,24 +65,27 @@ export default function EditarProducto() {
 
         setGuardando(true);
         try {
+            const payload = {
+                id_producto: id,
+                nombre: producto.nombre,
+                descripcion: producto.descripcion,
+                precio: producto.precio,
+                imagen: producto.imagen || "", // nombre de archivo o URL
+                id_categoria: producto.id_categoria || 1,
+                stock: producto.stock || 0
+            };
+
             const res = await fetch(
                 getApiUrl('EDITAR_PRODUCTO'),
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        ...producto,
-                        id_producto: id,
-                        id_categoria: producto.id_categoria || 1,
-                        stock: producto.stock || 0,
-                    }),
+                    body: JSON.stringify(payload),
                 }
             );
 
-            const text = await res.text();
-            console.log("🔹 Respuesta backend:", text);
+            const data = await res.json();
 
-            const data = JSON.parse(text);
             if (data.status === 200) {
                 alert("Éxito: Producto actualizado correctamente");
                 navigate("/tienda");
@@ -90,6 +94,7 @@ export default function EditarProducto() {
             }
         } catch (err) {
             console.error("❌ Error al guardar:", err);
+            alert("Error de conexión");
         } finally {
             setGuardando(false);
         }
@@ -105,27 +110,27 @@ export default function EditarProducto() {
 
             <input
                 placeholder="Nombre"
-                value={producto.nombre}
+                value={producto.nombre || ""}
                 onChange={(e) => setProducto({ ...producto, nombre: e.target.value })}
                 style={styles.input}
             />
             <input
                 placeholder="Precio"
-                value={String(producto.precio)}
+                value={String(producto.precio || "")}
                 onChange={(e) => setProducto({ ...producto, precio: e.target.value })}
                 type="number"
                 style={styles.input}
             />
             <textarea
                 placeholder="Descripción"
-                value={producto.descripcion}
+                value={producto.descripcion || ""}
                 onChange={(e) => setProducto({ ...producto, descripcion: e.target.value })}
                 style={{...styles.input, ...styles.textarea}}
             />
 
             <div style={styles.imageSection}>
                 <img
-                    src={producto.imagen || "https://placehold.co/300x300?text=Sin+imagen"}
+                    src={getImageUrl(producto.imagen) || "https://placehold.co/300x300?text=Sin+imagen"}
                     style={styles.previewImage}
                     alt="Producto"
                 />

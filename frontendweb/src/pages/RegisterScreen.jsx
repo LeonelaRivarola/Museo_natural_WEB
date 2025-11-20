@@ -1,3 +1,4 @@
+// src/pages/RegisterScreen.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getApiUrl } from '../config/api';
@@ -73,7 +74,6 @@ const RegisterScreen = () => {
     return (
         <div className="register-container">
             <div className="register-card">
-
                 <div className="register-left">
                     <img 
                         src="/images/logo-sinfondo.png" 
@@ -157,10 +157,7 @@ const RegisterScreen = () => {
                     </div>
                 </div>
 
-
-                <div className="register-right">
-
-                </div>
+                <div className="register-right"></div>
             </div>
         </div>
     );

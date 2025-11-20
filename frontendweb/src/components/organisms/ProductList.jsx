@@ -1,7 +1,8 @@
+// src/components/ProductList.jsx
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../molecules/ProductCard";
-import { getApiUrl } from '../../config/api';
+import { getApiUrl, getImageUrl } from '../../config/api';
 
 export default function ProductList() {
   const [productos, setProductos] = useState([]);
@@ -20,7 +21,12 @@ export default function ProductList() {
       .then((res) => res.json())
       .then((data) => {
         console.log("📦 Productos recibidos:", data);
-        setProductos(data);
+        // Normalizo la imagen a URL completa (si viene nombre de archivo)
+        const normalized = (data || []).map(item => ({
+          ...item,
+          imagen: getImageUrl(item.imagen)
+        }));
+        setProductos(normalized);
       })
       .catch((err) => {
         console.error("❌ Error al cargar productos:", err);
@@ -30,11 +36,13 @@ export default function ProductList() {
 
   const eliminarProducto = async (id) => {
     try {
-      const res = await fetch(`${getApiUrl('ELIMINAR_PRODUCTO')}?id=${id}`,
-        { method: "DELETE" }
-      );
+      const res = await fetch(`${getApiUrl('ELIMINAR_PRODUCTO')}?id=${id}`, { method: "DELETE" });
+      const data = await res.json().catch(()=>null);
+      // Si el endpoint devuelve { success: true } o un http ok, actualizo lista
       if (res.ok) {
-        setProductos(productos.filter((p) => p.id !== id));
+        setProductos(productos.filter((p) => p.id_producto !== id));
+      } else {
+        console.warn("No se pudo eliminar:", data);
       }
     } catch (err) {
       console.error("❌ Error al eliminar:", err);

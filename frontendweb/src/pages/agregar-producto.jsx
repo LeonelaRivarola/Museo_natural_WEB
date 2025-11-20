@@ -9,6 +9,7 @@ export default function AgregarProducto() {
   const [precio, setPrecio] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [imagen, setImagen] = useState(null); // archivo seleccionado
+  const [guardando, setGuardando] = useState(false);
 
   const handleAgregar = async () => {
     if (!nombre || !precio) {
@@ -16,40 +17,43 @@ export default function AgregarProducto() {
       return;
     }
 
-    try {
-      let imagen_id = null;
+    setGuardando(true);
 
-      // --------------------------------------------------------------------
-      // 1️⃣ SI HAY IMAGEN → SUBIRLA AL CRUD DE IMÁGENES
-      // --------------------------------------------------------------------
+    try {
+      let imagenNombre = null;
+
+      // 1️⃣ Si hay imagen → subirla al endpoint SUBIR_IMAGEN
       if (imagen) {
         const formImg = new FormData();
         formImg.append("archivo", imagen);
         formImg.append("titulo", nombre);
 
-        const resImg = await fetch(getApiUrl("IMAGEN_CREATE"), {
+        const resImg = await fetch(getApiUrl("SUBIR_IMAGEN"), {
           method: "POST",
           body: formImg,
         });
 
         const dataImg = await resImg.json();
 
-        if (!dataImg || !dataImg.id) {
+        // subir_imagen_producto.php devuelve { success: true, nombreArchivo: "prod_xxx.jpg" }
+        if (!dataImg || !dataImg.success) {
           alert("Error al subir la imagen");
+          setGuardando(false);
           return;
         }
 
-        imagen_id = dataImg.id;
+        imagenNombre = dataImg.nombreArchivo;
       }
 
-      // --------------------------------------------------------------------
-      // 2️⃣ ENVIAR LOS DATOS DEL PRODUCTO + id_imagen
-      // --------------------------------------------------------------------
+      // 2️⃣ Enviar los datos del producto (form-data) al agregar_producto.php
       const formData = new FormData();
       formData.append("nombre", nombre);
       formData.append("precio", precio);
       formData.append("descripcion", descripcion);
-      if (imagen_id) formData.append("imagen_id", imagen_id);
+      if (imagenNombre) formData.append("imagen", imagenNombre);
+      // opcional: id_categoria, stock
+      // formData.append("id_categoria", 1);
+      // formData.append("stock", 0);
 
       const res = await fetch(getApiUrl("AGREGAR_PRODUCTO"), {
         method: "POST",
@@ -68,6 +72,8 @@ export default function AgregarProducto() {
     } catch (err) {
       console.error("❌ Error al agregar producto:", err);
       alert("Error de conexión con el servidor");
+    } finally {
+      setGuardando(false);
     }
   };
 
@@ -105,8 +111,8 @@ export default function AgregarProducto() {
         style={styles.input}
       />
 
-      <button style={styles.button} onClick={handleAgregar}>
-        <span style={styles.buttonText}>Guardar</span>
+      <button style={styles.button} onClick={handleAgregar} disabled={guardando}>
+        <span style={styles.buttonText}>{guardando ? "Guardando..." : "Guardar"}</span>
       </button>
     </div>
   );

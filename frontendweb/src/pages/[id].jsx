@@ -7,7 +7,7 @@ export default function ProductDetailScreen() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://192.168.0.104/ProyectoFinal/backend/producto.php?id=${id}`)
+    fetch(`http://172.17.96.136/ProyectoFinal/backend/producto.php?id=${id}`)
       .then((res) => res.json())
       .then((data) => setProducto(data))
       .catch((err) => console.error("❌ Error al cargar producto:", err))

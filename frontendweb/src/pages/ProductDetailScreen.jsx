@@ -1,6 +1,7 @@
+// src/pages/ProductDetailScreen.jsx
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { getApiUrl } from "../config/api";;
+import { getApiUrl, getImageUrl } from "../config/api";
 
 export default function ProductDetailScreen() {
   const { id } = useParams();
@@ -23,7 +24,7 @@ export default function ProductDetailScreen() {
     );
   }
 
-  if (!producto) {
+  if (!producto || producto.error) {
     return (
       <div style={styles.center}>
         <span>No se encontró el producto.</span>
@@ -34,8 +35,9 @@ export default function ProductDetailScreen() {
   return (
     <div style={styles.container}>
       <img
-        src={producto.imagen || "https://via.placeholder.com/300x200?text=Sin+Imagen"}
+        src={getImageUrl(producto.imagen) || "https://via.placeholder.com/300x200?text=Sin+Imagen"}
         style={styles.image}
+        alt={producto.nombre}
       />
       <span style={styles.title}>{producto.nombre}</span>
       <span style={styles.price}>${parseFloat(producto.precio).toFixed(2)}</span>
