@@ -8,6 +8,7 @@ export default function ProductImage({ uri }) {
       <img
         src={uri || fallback}
         style={styles.image}
+        alt="Producto"
       />
     </div>
   );
@@ -16,10 +17,9 @@ export default function ProductImage({ uri }) {
 const styles = {
   container: {
     width: "100%",
-    height: 150,
-    borderRadius: 10,
+    height: 120,
     overflow: "hidden",
-    backgroundColor: "#eee",
+    backgroundColor: "#f5f5f5",
   },
   image: {
     width: "100%",

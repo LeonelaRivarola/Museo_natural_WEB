@@ -1,4 +1,4 @@
-// frontendweb/src/constants/themes.ts
+// frontendweb/src/constants/theme.js
 
 const tintColorLight = "#c47719";
 const tintColorDark = "#c47719";
@@ -11,8 +11,8 @@ export const Colors = {
     navbarBackground: tintColorLight,
     navbarText: "#fff",
     buttonText: "#fff",
-    icon: "#555",           // íconos grises
-    hamburger: "#000",      // ← hamburguesa negra para modo claro
+    icon: "#555",
+    hamburger: "#000",
     tabIconDefault: "#777",
     tabIconSelected: tintColorLight,
   },
@@ -23,14 +23,13 @@ export const Colors = {
     navbarBackground: tintColorDark,
     navbarText: "#fff",
     buttonText: "#fff",
-    icon: "#ddd",           // íconos claros
-    hamburger: "#fff",      // ← hamburguesa blanca para modo oscuro
+    icon: "#ddd",
+    hamburger: "#fff",
     tabIconDefault: "#aaa",
     tabIconSelected: tintColorDark,
   },
 };
 
-// Para web no necesitamos Platform.select
 export const Fonts = {
   sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
   serif: "Georgia, 'Times New Roman', Times, serif",
@@ -38,5 +37,4 @@ export const Fonts = {
   mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
 };
 
-// Compatibilidad
 export const FontFamilies = Fonts;

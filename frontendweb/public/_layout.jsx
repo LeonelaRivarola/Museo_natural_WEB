@@ -4,6 +4,7 @@ import IndexPage from './pages/Home';
 import HomeScreen from './pages/Home/HomeScreen';
 import StoreScreen from './pages/StoreScreen';
 import LoginScreen from './pages/LoginScreen';
+import RegisterScreen from './pages/RegisterScreen';
 import ProductDetailScreen from './pages/ProductDetailScreen';
 import AgregarProducto from './pages/AgregarProducto';
 import EditarProducto from './pages/EditarProducto';
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/home" element={<HomeScreen />} />
         <Route path="/tienda" element={<StoreScreen />} />
         <Route path="/login" element={<LoginScreen />} />
+        <Route path="/registrar" element={<RegisterScreen />} />
         <Route path="/ayuda" element={<Ayuda />} />
         
         {/* Rutas de productos */}

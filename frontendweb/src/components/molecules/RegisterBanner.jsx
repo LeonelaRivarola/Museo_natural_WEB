@@ -75,7 +75,7 @@ export default function RegisterBanner() {
       <div style={styles.buttonsContainer}>
         <button
           style={{...styles.button, ...styles.primary}}
-          onClick={() => navigate("/registrar")}
+          onClick={() => navigate("/registrarse")}
         >
           <span style={styles.buttonText}>Crear cuenta</span>
         </button>
