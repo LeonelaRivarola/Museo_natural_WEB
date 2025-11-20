@@ -1,3 +1,4 @@
+// components/molecules/LoginForm.jsx
 import React from "react";
 import InputField from "../atoms/InputField";
 
@@ -10,10 +11,11 @@ export default function LoginForm({
   return (
     <div style={styles.container}>
       <InputField
-        placeholder="Usuario"
+        placeholder="Usuario o email"
         icon="person-outline"
         value={usuario}
         onChangeText={setUsuario}
+        type="text"
       />
 
       <InputField
@@ -21,10 +23,10 @@ export default function LoginForm({
         icon="lock-closed-outline"
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        type="password"
       />
 
-      <span style={styles.footerText}>¿Has olvidado la contraseña?</span>
+      <span style={styles.footerText}>¿Olvidaste tu contraseña?</span>
     </div>
   );
 }
@@ -32,17 +34,21 @@ export default function LoginForm({
 const styles = {
   container: {
     width: "100%",
+    display: "flex",
+    flexDirection: "column",
     alignItems: "center",
-    marginTop: 5,
-    paddingLeft: 20,
-    paddingRight: 20,
-    maxWidth: 400,
-    alignSelf: "center",
+    gap: "20px",
+    padding: "0 10px",
   },
   footerText: {
-    fontSize: 12,
-    color: "#555",
-    marginTop: 8,
+    fontSize: "14px",
+    color: "#c47719",
+    marginTop: "10px",
     textAlign: "center",
+    cursor: "pointer",
+    textDecoration: "underline",
+    "@media (max-width: 480px)": {
+      fontSize: "13px",
+    }
   },
 };

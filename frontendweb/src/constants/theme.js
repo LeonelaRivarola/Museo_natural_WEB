@@ -11,7 +11,8 @@ export const Colors = {
     navbarBackground: tintColorLight,
     navbarText: "#fff",
     buttonText: "#fff",
-    icon: "#555",
+    icon: "#555",           // íconos grises
+    hamburger: "#000",      // ← hamburguesa negra para modo claro
     tabIconDefault: "#777",
     tabIconSelected: tintColorLight,
   },
@@ -22,13 +23,14 @@ export const Colors = {
     navbarBackground: tintColorDark,
     navbarText: "#fff",
     buttonText: "#fff",
-    icon: "#aaa",
+    icon: "#ddd",           // íconos claros
+    hamburger: "#fff",      // ← hamburguesa blanca para modo oscuro
     tabIconDefault: "#aaa",
     tabIconSelected: tintColorDark,
   },
 };
 
-// Para web, podemos simplificar las fuentes ya que no necesitamos Platform.select
+// Para web no necesitamos Platform.select
 export const Fonts = {
   sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
   serif: "Georgia, 'Times New Roman', Times, serif",
@@ -36,5 +38,5 @@ export const Fonts = {
   mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
 };
 
-// Opcional: Si quieres mantener compatibilidad con el código existente
+// Compatibilidad
 export const FontFamilies = Fonts;

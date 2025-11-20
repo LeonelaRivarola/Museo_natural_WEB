@@ -1,59 +1,52 @@
+// components/atoms/InputField.jsx
 import React from "react";
 
-export default function InputField({
-  placeholder,
-  icon,
-  value,
-  onChangeText,
-  secureTextEntry,
-}) {
+const InputField = ({ 
+  placeholder, 
+  icon, 
+  value, 
+  onChangeText, 
+  type = "text",
+  secureTextEntry = false 
+}) => {
   return (
-    <div style={styles.container}>
-      <span style={styles.icon}>{icon}</span>
+    <div style={styles.inputContainer}>
+      {/* Si tienes íconos, puedes implementarlos aquí */}
       <input
         style={styles.input}
+        type={secureTextEntry ? "password" : type}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChangeText(e.target.value)}
-        type={secureTextEntry ? "password" : "text"}
       />
     </div>
   );
-}
+};
 
 const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderStyle: "solid",
-    borderRadius: 8,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 8,
-    paddingBottom: 8,
-    marginBottom: 12,
-    backgroundColor: "#fff",
+  inputContainer: {
     width: "100%",
-    maxWidth: 500,
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-  icon: {
-    marginRight: 8,
-    color: "#c47719",
-    fontSize: 20,
+    position: "relative",
   },
   input: {
-    flex: 1,
-    paddingTop: 10,
-    paddingBottom: 10,
-    color: "#333",
-    fontSize: 18,
-    border: "none",
+    width: "100%",
+    padding: "15px 20px",
+    fontSize: "16px",
+    border: "2px solid #e0e0e0",
+    borderRadius: "10px",
+    backgroundColor: "#fff",
     outline: "none",
-    backgroundColor: "transparent",
+    transition: "all 0.3s ease",
+    boxSizing: "border-box",
+    "&:focus": {
+      borderColor: "#c47719",
+      boxShadow: "0 0 0 3px rgba(196, 119, 25, 0.1)",
+    },
+    "@media (max-width: 480px)": {
+      padding: "12px 16px",
+      fontSize: "14px",
+    }
   },
 };
+
+export default InputField;

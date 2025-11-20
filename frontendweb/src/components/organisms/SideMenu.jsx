@@ -52,13 +52,18 @@ const SideMenu = ({ visible, onClose }) => {
       <div style={styles.overlay} onClick={onClose} />
       
       <div style={styles.menu}>
+        {/* Botón de cierre agregado */}
+        <button style={styles.closeButton} onClick={onClose}>
+          <span style={styles.closeIcon}>×</span>
+        </button>
+        
         <span style={styles.title}>Menú</span>
 
-        <MenuItem label="Inicio" iconName="🏠" onPress={() => { onClose(); navigate("/home"); }} />
-        <MenuItem label="Galería" iconName="🖼️" onPress={() => { onClose(); navigate("/galeria"); }} />
-        <MenuItem label="Tienda" iconName="🛍️" onPress={() => { onClose(); navigate("/tienda"); }} />
-        <MenuItem label="Eventos" iconName="📅" onPress={() => console.log("Eventos")} />
-        <MenuItem label="Ayuda" iconName="❓" onPress={() => console.log("Ayuda")} />
+        <MenuItem label="Inicio" onPress={() => { onClose(); navigate("/home"); }} />
+        <MenuItem label="Galería"  onPress={() => { onClose(); navigate("/galeria"); }} />
+        <MenuItem label="Tienda" onPress={() => { onClose(); navigate("/tienda"); }} />
+        <MenuItem label="Eventos" onPress={() => console.log("Eventos")} />
+        <MenuItem label="Ayuda" onPress={() => console.log("Ayuda")} />
 
         <div style={styles.separator} />
 
@@ -69,10 +74,10 @@ const SideMenu = ({ visible, onClose }) => {
               <span style={styles.userName}>{user.nombre} {user.apellido}</span>
             </div>
 
-            <MenuItem label="Cerrar sesión" iconName="🚪" highlight onPress={logout} />
+            <MenuItem label="Cerrar sesión" highlight onPress={logout} />
           </>
         ) : (
-          <MenuItem label="Iniciar sesión" iconName="🔑" highlight onPress={() => { onClose(); navigate("/login"); }} />
+          <MenuItem label="Iniciar sesión" highlight onPress={() => { onClose(); navigate("/login"); }} />
         )}
       </div>
     </div>
@@ -112,6 +117,27 @@ const styles = {
     paddingRight: 20,
     boxShadow: "-2px 0 6px rgba(0,0,0,0.4)",
     overflowY: "auto",
+  },
+  // Nuevos estilos para el botón de cierre
+  closeButton: {
+    position: "absolute",
+    top: 15,
+    right: 15,
+    width: 50,
+    height: 50,
+    borderRadius: "50%",
+    backgroundColor: "#f0f0f0",
+    border: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+  },
+  closeIcon: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#333",
+    lineHeight: 1,
   },
   title: {
     fontSize: 22,

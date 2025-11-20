@@ -1,62 +1,99 @@
 import { useThemeColor } from "../../hooks/use-theme-color";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideMenu from "./SideMenu";
 
-export default function NavbarWeb() {
+export default function Navbar() {
   const accentColor = useThemeColor({}, "tint");
   const [menuVisible, setMenuVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Mapeo correcto de rutas
+  const navItems = [
+    { label: "Inicio", path: "/home" },
+    { label: "Galería", path: "/galeria" },
+    { label: "Tienda", path: "/tienda" },
+    { label: "Ayuda", path: "/ayuda" }
+  ];
 
   return (
     <div style={styles.navbarWrapper}>
       <div style={styles.navbar}>
+        {/* IZQUIERDA */}
         <div style={styles.leftContainer}>
           <button style={styles.logoButton} onClick={() => navigate("/home")}>
-            <img
-              src="/images/logo-sinfondo.png"
-              style={styles.logo}
+            <img 
+              src="/images/logo-sinfondo.png" 
+              style={styles.logo} 
+              alt="Museo Natural"
             />
           </button>
           <span style={styles.title}>Museo Natural</span>
         </div>
 
+        {/* DERECHA */}
         <div style={styles.rightContainer}>
-          <div style={styles.navLinks}>
-            <button style={styles.linkButton} onClick={() => navigate("/home")}>
-              <span style={styles.link}>Inicio</span>
-            </button>
+          {!isMobile && (
+            <>
+              <div style={styles.navLinks}>
+                {navItems.map((item) => (
+                  <button 
+                    key={item.path}
+                    style={styles.linkButton} 
+                    onClick={() => navigate(item.path)}
+                  >
+                    <span style={styles.link}>{item.label}</span>
+                  </button>
+                ))}
+              </div>
 
-            <button style={styles.linkButton} onClick={() => navigate("/galeria")}>
-              <span style={styles.link}>Galería</span>
-            </button>
+              {user ? (
+                <button style={styles.avatarContainer} onClick={logout}>
+                  <span style={{ ...styles.avatarIcon, color: accentColor }}>👤</span>
+                  <span style={styles.userName}>{user.nombre}</span>
+                </button>
+              ) : (
+                <button
+                  style={{ ...styles.loginButton, backgroundColor: accentColor }}
+                  onClick={() => navigate("/login")}
+                >
+                  <span style={styles.loginText}>Iniciar sesión</span>
+                </button>
+              )}
+            </>
+          )}
 
-            <button style={styles.linkButton} onClick={() => navigate("/tienda")}>
-              <span style={styles.link}>Tienda</span>
-            </button>
-
-            <button style={styles.linkButton} onClick={() => navigate("/ayuda")}>
-              <span style={styles.link}>Ayuda</span>
-            </button>
-          </div>
-
-          {user ? (
-            <button style={styles.avatarContainer} onClick={logout}>
-              <span style={{...styles.avatarIcon, color: accentColor}}>👤</span>
-              <span style={styles.userName}>{user.nombre}</span>
-            </button>
-          ) : (
-            <button
-              style={{...styles.loginButton, backgroundColor: accentColor}}
-              onClick={() => navigate("/login")}
+          {isMobile && (
+            <button 
+              onClick={() => setMenuVisible(true)} 
+              style={styles.hamburgerButton}
             >
-              <span style={styles.loginText}>Iniciar sesión</span>
+              <div style={styles.hamburgerLine}></div>
+              <div style={styles.hamburgerLine}></div>
+              <div style={styles.hamburgerLine}></div>
             </button>
           )}
         </div>
       </div>
+
+      {isMobile && (
+        <SideMenu
+          visible={menuVisible}
+          onClose={() => setMenuVisible(false)}
+          user={user}
+          onLogout={logout}
+          accentColor={accentColor}
+        />
+      )}
     </div>
   );
 }
@@ -64,97 +101,119 @@ export default function NavbarWeb() {
 const styles = {
   navbarWrapper: {
     width: "100%",
-    display: "flex",
-    alignItems: "center",
     backgroundColor: "#fff",
     position: "fixed",
     top: 0,
     left: 0,
-    zIndex: 100,
+    zIndex: 1000,
     boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+    maxWidth: "100vw",
+    boxSizing: "border-box",
   },
   navbar: {
-    width: "90%",
-    maxWidth: 1200,
-    paddingTop: 8,
-    paddingBottom: 8,
+    width: "100%",
+    padding: "8px 16px",
     display: "flex",
-    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    boxSizing: "border-box",
+    maxWidth: "1200px",
+    margin: "0 auto",
   },
   leftContainer: {
     display: "flex",
-    flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: "12px",
+    flexShrink: 1,
+    minWidth: 0,
   },
   logoButton: {
     border: "none",
     background: "none",
     cursor: "pointer",
-    padding: 0,
+    padding: "4px",
+    flexShrink: 0,
   },
   logo: {
-    width: 90,
-    height: 55,
+    width: "60px",
+    height: "auto",
+    maxHeight: "40px",
+    objectFit: "contain",
   },
   title: {
-    fontSize: 23,
+    fontSize: "clamp(16px, 4vw, 23px)",
     fontWeight: "bold",
     color: "#000",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   rightContainer: {
     display: "flex",
-    flexDirection: "row",
     alignItems: "center",
-    gap: 25,
+    gap: "16px",
+    flexShrink: 0,
   },
   navLinks: {
     display: "flex",
-    flexDirection: "row",
-    gap: 20,
+    gap: "20px",
   },
   linkButton: {
     border: "none",
     background: "none",
     cursor: "pointer",
-    padding: 0,
+    padding: "8px 4px",
   },
   link: {
     color: "#000",
-    fontSize: 16,
+    fontSize: "16px",
     fontWeight: "500",
+    whiteSpace: "nowrap",
   },
   loginButton: {
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 22,
-    paddingRight: 22,
-    borderRadius: 25,
+    padding: "8px 20px",
+    borderRadius: "25px",
     border: "none",
     cursor: "pointer",
+    whiteSpace: "nowrap",
   },
   loginText: {
     color: "#fff",
-    fontSize: 15,
+    fontSize: "15px",
     fontWeight: "bold",
   },
   avatarContainer: {
     display: "flex",
-    flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: "8px",
     border: "none",
     background: "none",
     cursor: "pointer",
-    padding: 0,
+    padding: "4px 8px",
   },
-  avatarIcon: {
-    fontSize: 32,
+  avatarIcon: { 
+    fontSize: "28px",
   },
-  userName: {
-    color: "#000",
+  userName: { 
+    color: "#000", 
     fontWeight: "500",
+    whiteSpace: "nowrap",
+  },
+  hamburgerButton: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    width: "28px",
+    height: "22px",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    padding: "0",
+  },
+  hamburgerLine: {
+    width: "100%",
+    height: "3px",
+    backgroundColor: "#000",
+    borderRadius: "2px",
   },
 };
